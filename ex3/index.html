@@ -1,0 +1,186 @@
+
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"> 
+<head> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+<title>Google Maps JavaScript API Example: Custom StreetView</title> 
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" /> 
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script> 
+<script type="text/javascript"> 
+ 
+  var map;
+  var panorama;
+  
+  // The latlng of the entry point to the Google office on the road.
+  var macCampus = new google.maps.LatLng(44.940131,-93.167893);
+  
+  // The panorama that will be used as the entry point to the custom
+  // panorama set.
+  var entryPanoId = null;
+ 
+  function initialize() {
+  
+    startApplication();
+    
+    var panoSearchRadius = 50;
+ 
+    // Create a StreetViewService object.
+    var client = new google.maps.StreetViewService();
+ 
+    // Compute the nearest panorama to the Google Sydney office
+    // using the service and store that pano ID.  
+    client.getPanoramaByLocation(macCampus, panoSearchRadius, function(result, status) {
+      if (status == google.maps.StreetViewStatus.OK) {
+        entryPanoId = result.location.pano;
+      }  
+    });
+  }
+ 
+  function startApplication() {
+ 
+    // Set up the map and enable the Street View control.
+    var mapOptions = {
+      center: macCampus,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+	  centerHeading: 0,
+    };
+    map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+ 
+    panorama = map.getStreetView();
+    // Set up Street View and initially set it visible. Register the
+    // custom panorama provider function.
+    var panoOptions = {
+      position: macCampus,
+      visible: true,
+      panoProvider:  getCustomPanorama
+    }
+    panorama.setOptions(panoOptions);
+ 
+    // We'll monitor the links_changed event to check if the current pano is either
+    // a custom pano or our entry pano.        
+    google.maps.event.addListener(panorama, 'links_changed', createCustomLinks);
+ 
+  }
+ 
+  // Return a pano image given the panoID.
+  function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
+    //return 'photo.jpg';
+	return pano + '.jpg';
+    //return 'images/panoReception1024-' + zoom + '-' + tileX + '-' +tileY + '.jpg';
+  }
+ 
+  function getCustomPanorama(pano,zoom,tileX,tileY) {
+ 
+    var center;
+ 
+    switch(pano) {
+ 
+	  case entryPanoId:
+		//centerHeading: -20,
+		//return {
+		//  centerHeading: -20
+		//  }
+		break;     
+	  case 'reception':
+        center = new google.maps.LatLng(44.939946,-93.167842);
+        return {
+          location: {
+            pano: 'reception',
+            description: "Google Sydney - Reception",
+            latLng: center
+          },
+          links: [
+            ],
+          // The text for the copyright control.
+          copyright: 'Imagery (c) 2010 Google',
+          // The definition of the tiles for this panorama.
+          tiles: {
+            tileSize: new google.maps.Size(4323, 1712),
+            worldSize: new google.maps.Size(4323, 1712),
+            // The heading at the origin of the panorama tile set.
+            centerHeading: 80,
+            getTileUrl: getCustomPanoramaTileUrl
+          }
+        };
+        break;
+	  case 'daytonPlaza':
+        center = new google.maps.LatLng(44.939456,-93.168062);
+        return {
+          location: {
+            pano: 'daytonPlaza',
+            description: "Campus Center - Dayton Plaza",
+            latLng: center
+          },
+          links: [
+            ],
+          // The text for the copyright control.
+          copyright: 'Imagery (c) 2010 Google',
+          // The definition of the tiles for this panorama.
+          tiles: {
+            tileSize: new google.maps.Size(4140, 1463),
+            worldSize: new google.maps.Size(4140, 1463),
+            // The heading at the origin of the panorama tile set.
+            centerHeading: 0,
+            getTileUrl: getCustomPanoramaTileUrl
+          }
+        };
+        break;
+      default:
+        return null;
+    }
+  }
+   
+  function createCustomLinks() {
+ 
+    if (entryPanoId) {
+      var links = panorama.getLinks();
+      var panoId = panorama.getPano();
+ 
+      switch(panoId) {
+ 
+        case entryPanoId:
+          // Adding a link in the view from the entrance of the building to
+          // reception.
+          links.push({
+            'heading': 180,
+            'description' : 'Mac Campus',
+            'pano' : 'reception'
+          });
+          break;
+        case 'reception':
+          // Adding a link in the view from the entrance of the office
+          // with an arrow pointing at 100 degrees, with a text of "Exit"
+          // and loading the street entrance of the building pano on click.
+          links.push({
+            'heading': 0,
+            'description' : 'Exit',
+            'pano' : entryPanoId
+          });
+          links.push({
+            'heading': 190,
+            'description' : 'Dayton Plaza',
+            'pano' : 'daytonPlaza'
+          });
+          break;
+        case 'daytonPlaza':
+          // Adding a link in the view from the entrance of the office
+          // with an arrow pointing at 100 degrees, with a text of "Exit"
+          // and loading the street entrance of the building pano on click.
+          links.push({
+            'heading': 20,
+            'description' : 'Cross Walk',
+            'pano' : 'reception'
+          });
+          break;
+        default:
+          return;
+      }
+    }
+  }
+</script> 
+</head> 
+<body onload="initialize()"> 
+  <div id="map_canvas" style="width: 100%; height: 100%"></div> 
+</body> 
+</html> 
