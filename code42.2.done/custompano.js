@@ -54,6 +54,28 @@
           }
         };
         break;
+	  case 'code42atrium':
+        center = new google.maps.LatLng(44.986741,-93.258385);
+        return {
+          location: {
+            pano: 'code42atrium',
+            description: "Campus Center - Dayton Plaza",
+            latLng: center
+          },
+          links: [
+            ],
+          // The text for the copyright control.
+          copyright: 'Imagery (c) 2010 Google',
+          // The definition of the tiles for this panorama.
+          tiles: {
+            tileSize: new google.maps.Size(2048, 1024),
+            worldSize: new google.maps.Size(2048, 1024),
+            // The heading at the origin of the panorama tile set.
+            centerHeading: 190,
+            getTileUrl: getCustomPanoramaTileUrl
+          }
+        };
+        break;
       default:
         return null;
     }
@@ -73,7 +95,7 @@
           links.push({
             'heading': 150,
             'description' : 'Code 42',
-            'pano' : 'reception'
+            'pano' : 'code42atrium'
           });
           break;
         case 'reception':
@@ -96,6 +118,12 @@
             'heading': 20,
             'description' : 'Cross Walk',
             'pano' : 'reception'
+          });
+        case 'code42Atrium':
+          links.push({
+            'heading': 20,
+            'description' : 'Hennepin Ave',
+            'pano' : entryPanoId
           });
           break;
         default:
