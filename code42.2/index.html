@@ -1,0 +1,79 @@
+
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"> 
+<head> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+<title>Google Maps JavaScript API Example: Custom StreetView</title> 
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" /> 
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script> 
+<script src="custompano.js" type="text/javascript"></script> 
+<script type="text/javascript"> 
+ 
+  var map;
+  var panorama;
+  
+  // The latlng of the entry point to the Google office on the road.
+  var macCampus = new google.maps.LatLng(44.940131,-93.167893);
+  
+  // The panorama that will be used as the entry point to the custom
+  // panorama set.
+  var entryPanoId = null;
+ 
+  function initialize() {
+  
+    startApplication();
+    
+    var panoSearchRadius = 50;
+ 
+    // Create a StreetViewService object.
+    var client = new google.maps.StreetViewService();
+ 
+    // Compute the nearest panorama to the Google Sydney office
+    // using the service and store that pano ID.  
+    client.getPanoramaByLocation(macCampus, panoSearchRadius, function(result, status) {
+      if (status == google.maps.StreetViewStatus.OK) {
+        entryPanoId = result.location.pano;
+      }  
+    });
+  }
+ 
+  function startApplication() {
+ 
+    // Set up the map and enable the Street View control.
+    var mapOptions = {
+      center: macCampus,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+	  centerHeading: 0,
+    };
+    map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+ 
+    panorama = map.getStreetView();
+    // Set up Street View and initially set it visible. Register the
+    // custom panorama provider function.
+    var panoOptions = {
+      position: macCampus,
+      visible: true,
+      panoProvider:  getCustomPanorama
+    }
+    panorama.setOptions(panoOptions);
+ 
+    // We'll monitor the links_changed event to check if the current pano is either
+    // a custom pano or our entry pano.        
+    google.maps.event.addListener(panorama, 'links_changed', createCustomLinks);
+ 
+  }
+ 
+  // Return a pano image given the panoID.
+  function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
+    //return 'photo.jpg';
+	return pano + '.jpg';
+    //return 'images/panoReception1024-' + zoom + '-' + tileX + '-' +tileY + '.jpg';
+  }
+ 
+</script> 
+</head> 
+<body onload="initialize()"> 
+  <div id="map_canvas" style="width: 100%; height: 100%"></div> 
+</body> 
+</html> 

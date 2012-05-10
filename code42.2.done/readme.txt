@@ -1,0 +1,1 @@
+Try and add the atrium pano files to the index.html files..
