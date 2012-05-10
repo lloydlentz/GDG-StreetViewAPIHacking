@@ -71,7 +71,7 @@
           // Adding a link in the view from the entrance of the building to
           // reception.
           links.push({
-            'heading': 180,
+            'heading': 150,
             'description' : 'Code 42',
             'pano' : 'reception'
           });
