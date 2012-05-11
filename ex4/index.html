@@ -1,4 +1,3 @@
-
 <!DOCTYPE html> 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"> 
 <head> 
@@ -22,7 +21,7 @@
   var crossWalkLatLon = new google.maps.LatLng(44.939946,-93.167842);
   var rockLatLon = new google.maps.LatLng(44.938944,-93.168494);
   //var sprite = 'http://maps.gstatic.com/intl/en_us/mapfiles/markers/marker_sprite.png';
-  var sprite = 'markerRed.png';
+  var sprite = '../img/markerRed.png';
   
   // The panorama that will be used as the entry point to the custom
   // panorama set.
@@ -168,7 +167,7 @@
 	  new google.maps.Size(40, 32),
 	  new google.maps.Point(20,0),
 	  new google.maps.Point(11, 32));
-    var blueImage = new google.maps.MarkerImage('markerBlue.png',
+    var blueImage = new google.maps.MarkerImage('../img/markerBlue.png',
 	  new google.maps.Size(40, 32),
 	  new google.maps.Point(0,0),
 	  new google.maps.Point(10, 32));
@@ -184,7 +183,7 @@
   // Return a pano image given the panoID.
   function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
     //return 'photo.jpg';
-	return pano + '.jpg';
+	return '../img/' + pano + '.jpg';
     //return 'images/panoReception1024-' + zoom + '-' + tileX + '-' +tileY + '.jpg';
   }
  

@@ -20,7 +20,7 @@
 	  var crossWalkLatLon = new google.maps.LatLng(44.939946,-93.167842);
 	  var rockLatLon = new google.maps.LatLng(44.938944,-93.168494);
 	  //var sprite = 'http://maps.gstatic.com/intl/en_us/mapfiles/markers/marker_sprite.png';
-	  var sprite = 'markerRed.png';
+	  var sprite = '../img/markerRed.png';
 	  
 	  // The panorama that will be used as the entry point to the custom
 	  // panorama set.
@@ -32,7 +32,7 @@
       function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
         // Return the URL of the tile.
         //return 'http://syd-office-panos.appspot.com/p/' + pano + '_' + zoom + '_' + tileX + '_' + tileY + '.jpg';
-        return 'img/' + pano + '/' + zoom + '/' + tileX + '-' + tileY + '.jpg';
+        return '../img/' + pano + '/' + zoom + '/' + tileX + '-' + tileY + '.jpg';
       }
  
       function createCustomPanoramaData(room, pano) {
